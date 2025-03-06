@@ -13,14 +13,25 @@ use Illuminate\Support\Facades\Route;
 //     [TaskController::class, 'task']
 // )->name('task');
 
-Route::get(
+Route::post(
     '/task/add',
     [TaskController::class, 'add']
 )->name('add');
 
-Route::get('/', function () {
-    return view('tasks.task');
-})->middleware(['auth', 'verified'])->name('task');
+Route::put(
+    '/task/update/{id}',
+    [TaskController::class, 'updateTask']
+)->name('update');
+
+Route::delete(
+    '/task/delete/{id}',
+    [TaskController::class, 'deleteTask']
+)->name('delete');
+
+Route::get('/', [TaskController::class, 'allTask'])
+    ->middleware(['auth', 'verified'])
+    ->name('task');
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
