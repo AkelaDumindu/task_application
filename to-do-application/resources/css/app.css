@@ -3,6 +3,8 @@
 @tailwind utilities;
 
 
+
+
 .main-label{
     margin-top: 50px;
     margin-left: 20px;
@@ -54,9 +56,8 @@
     
     
     display: flex;
-    
     align-items: center;
-    justify-content: flex-end;
+    justify-content: center;
     
 }
 
@@ -82,18 +83,58 @@
     border: 1px solid white;
 } */
 
+.sorting-outer{
+    display: flex;
+    justify-content: space-between;
+}
+
+.filter-double-outer{
+    flex: 0.6;
+    display: flex;
+    gap: 4px;
+}
 .category-filter-outer{
-    flex: 0.45;
+    flex: 0.5;
 }
 
 .priority-filter-outer{
-    flex: 0.55;
+    flex: 0.5;
+    
+}
+
+.search-filter-outer{
+    flex: 0.4;
+    display: flex;
+    gap: 4px;
     
 }
 
 
 
+.date-filter-butttons-outer{
+    width: 50%;
+    display: flex;
+    gap: 0;
+    border-radius: 40px;
+    border: 1px solid grey;
+    margin-top: 30px;
+}
+
+
+
 @media (max-width: 960px){
+
+    .sorting-outer{
+        display: block;
+        
+    }
+
+   
+    
+    .search-filter-outer{
+        margin-top: 8px;
+        
+    }
     
 }
 
@@ -124,6 +165,8 @@
     
     .edit-button{
         width: 80%;
+        justify-content: center;
+        align-items: center;
         
     }
 
@@ -246,7 +289,7 @@
 }
 
 .edit-button{
-    padding: 10px 15px;
+    padding: 10px
 }
 
 .radio-outer{
@@ -261,3 +304,11 @@
     justify-content: flex-end;
 }
 
+
+
+/* task card */
+
+.card-title-section{
+    display: flex;
+    justify-content: space-between  ;
+}

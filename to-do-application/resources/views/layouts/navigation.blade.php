@@ -12,7 +12,7 @@
 
                 <!-- Navigation Links -->
                 <div class="space-x-2 sm:-my-px sm:ms-10  ">
-                    <h1 class="text-white text-[36px]">Task Management Application</h1>
+                    <h1 class="text-white text-[20px] lg:text-[24px]">Task Management</h1>
                 </div>
                 
             </div>
