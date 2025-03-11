@@ -14,6 +14,12 @@ class Task extends Model
         'title',
         'description',
         'category',
-        'priority'
+        'priority',
+        'duedate',
+    ];
+
+
+    protected $dates = [
+        'duedate',
     ];
 }

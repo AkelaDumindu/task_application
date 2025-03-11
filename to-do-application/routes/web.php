@@ -23,12 +23,17 @@ Route::put(
     [TaskController::class, 'updateTask']
 )->name('update');
 
-Route::delete(
+Route::get(
     '/task/delete/{id}',
     [TaskController::class, 'deleteTask']
 )->name('delete');
 
-Route::get('/', [TaskController::class, 'allTask'])
+// Route::get(
+//     '/filterTask',
+//     [TaskController::class, 'task']
+// )->name('filterTask');
+
+Route::get('/', [TaskController::class, 'task'])
     ->middleware(['auth', 'verified'])
     ->name('task');
 

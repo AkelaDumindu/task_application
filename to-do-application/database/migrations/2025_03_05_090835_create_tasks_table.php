@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->string("title");
             $table->string("category");
             $table->string("priority");
+            $table->date("duedate");
             $table->text("description")->nullable();
             $table->boolean("is_completed")->default(false);
             $table->timestamps();
