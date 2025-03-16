@@ -16,7 +16,8 @@ return new class extends Migration {
             $table->string("category");
             $table->string("priority");
             $table->date("duedate");
-            $table->text("description")->nullable();
+            $table->text("description")->nullable()->str;
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->boolean("is_completed")->default(false);
             $table->timestamps();
         });
