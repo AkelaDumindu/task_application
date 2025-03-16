@@ -8,24 +8,30 @@
                 <h1 class="text-white text-[32px] lg:text-[36px] mt-4 font-bold">My Tasks</h1>
             </div>
 
-            <div class="button-outer">
+            <div class="button-outer gap-2">
+                
+
+                <a class="add-button flex gap-1.5 justify-center items-center bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 py-2 rounded-3xl "
+                    href="{{ route('summary') }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="size-4 @min-[478px]:size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                    </svg> PDF
+
+
+                </a>
+
                 <button data-modal-target="authentication-modal" data-modal-toggle="authentication-modal"
-                    class="flex justify-center items-center lg:text-[24px] text-[20px] bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 py-2 rounded-3xl "
-                    type="button"><span class="text-white lg:text-[24px] text-[20px] font-bold">+</span>
+                    class="add-button flex justify-center items-center bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 py-2 rounded-3xl "
+                    type="button">
                     Add
                     Task</button>
             </div>
 
         </div>
 
-        {{-- <div class="w-[80%] mb-5">
-            <h2 class="text-white text-[32px] font-bold mb-4">Today's Tasks</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                @foreach ($todayTasks as $task)
-                @include('components.task-card', ['task' => $task])
-                @endforeach
-            </div>
-        </div> --}}
+        
 
 
         <div class="filter-outer ">
@@ -68,6 +74,34 @@
                         </div>
 
 
+
+
+                    </div>
+
+                    <div class="priority-filter-outer">
+
+                        <div class="flex">
+                            <select id="summary" name="summary" onchange="this.form.submit()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
+                            focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 
+                            dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 
+                            dark:focus:border-blue-500">
+                                <option value="">Choose a Summary</option>
+                                <option value="completed" {{ request('summary') == 'completed' ? 'selected' : '' }}>
+                                    Completed
+                                </option>
+                                <option value="pending" {{ request('summary') == 'pending' ? 'selected' : '' }}>Pending
+                                </option>
+                                <option value="overdue" {{ request('summary') == 'overdue' ? 'selected' : '' }}>Overdue
+                                </option>
+
+                            </select>
+
+
+                        </div>
+
+
+
+
                     </div>
                 </div>
 
@@ -82,17 +116,16 @@
                         class="w-full flex-[0.3] text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                         Search</button>
 
-                    {{--
-                    <select id="priority" name="priority" onchange="this.form.submit()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
-                            focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 
-                            dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 
-                            dark:focus:border-blue-500">
-                        <option value="">Choose a priority</option>
-                        <option value="high" {{ request('priority')=='high' ? 'selected' : '' }}>High</option>
-                        <option value="medium" {{ request('priority')=='medium' ? 'selected' : '' }}>Medium</option>
-                        <option value="low" {{ request('priority')=='low' ? 'selected' : '' }}>Low</option>
+                    <a type="submit" href="{{ route('task') }}"
+                        class="w-full flex-[0.3] text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                        </svg>
 
-                    </select> --}}
+                    </a>
+
 
                 </div>
             </form>
@@ -104,14 +137,14 @@
 
 
             <a href="{{ route('task', ['filterDate' => 'all']) }}"
-                class="flex-[0.5] py-1  flex rounded-l-[40px] border-none text-[20px] justify-center items-center 
+                class="task-filter-today flex-[0.5] py-1  flex rounded-l-[40px] border-none justify-center items-center 
                 {{ request('filterDate') === 'all' || !request('filterDate') ? 'bg-gray-600 text-white' : 'border border-gray-600 text-gray-600 hover:bg-gray-600 hover:text-white' }}">
                 All Tasks
             </a>
 
 
             <a href="{{ route('task', ['filterDate' => 'today']) }}"
-                class="flex-[0.5] py-1 flex rounded-r-[40px] border-none text-[20px] justify-center items-center 
+                class="task-filter-today flex-[0.5] py-1 flex rounded-r-[40px] border-none justify-center items-center 
                 {{ request('filterDate') === 'today' ? 'bg-red-600 text-white' : 'border border-red-600 text-red-600 hover:bg-red-600 hover:text-white' }}">
                 Today Tasks
             </a>
@@ -119,35 +152,19 @@
         </div>
 
 
-
-        {{-- <div class="mt-5 flex w-full justify-center">
-            <form action="" method="get" class="flex justify-center w-[60%] gap-2">
-
-
-            </form>
-        </div> --}}
-
-
-
-
-
-
-
-
-
-
-        <div class="w-[80%] mt-8">
+        <div class="md:w-[80%] mt-8">
 
             <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                 @foreach ($tasks as $task)
                     @include('components.task-card', ['task' => $task])
                 @endforeach
+
+                <div class="mt-4">
+                    {{ $tasks->links() }}
+                </div>
+
             </div>
         </div>
-
-
-
-        {{-- @include('components.task-card') --}}
 
 
     </div>
@@ -202,12 +219,14 @@
                                         d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
                                 </svg>
                             </div>
-                            <input id="duedate" name="duedate" datepicker datepicker-buttons datepicker-autoselect-today
-                                datepicker-format="yyyy-mm-dd" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
-  focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 
-  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 
-  dark:focus:border-blue-500" placeholder="Select date">
+                            <input id="duedate" name="duedate" datepicker datepicker-format="yyyy-mm-dd"
+                                datepicker-min-date="{{ date('Y-m-d') }}" datepicker-buttons datepicker-autoselect-today
+                                type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
+                            focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 
+                            dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 
+                            dark:focus:border-blue-500" placeholder="Select date">
                         </div>
+
 
                         <div class="mb-5">
 
@@ -259,13 +278,19 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            const datepickerEl = document.getElementById('due_date');
+            const datepickerEl = document.getElementById('duedate');
+
+
+            const today = new Date().toISOString().split('T')[0];
+
             new Datepicker(datepickerEl, {
                 format: 'yyyy-mm-dd',
+                minDate: today,
                 autohide: true,
                 todayHighlight: true
             });
         });
     </script>
+
 
 </x-app-layout>

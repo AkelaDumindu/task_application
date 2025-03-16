@@ -16,10 +16,16 @@ class Task extends Model
         'category',
         'priority',
         'duedate',
+        'user_id'
     ];
 
 
     protected $dates = [
         'duedate',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

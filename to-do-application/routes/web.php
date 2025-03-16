@@ -4,38 +4,23 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Route;
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
 
-// Route::get(
-//     '/task',
-//     [TaskController::class, 'task']
-// )->name('task');
 
-Route::post(
-    '/task/add',
-    [TaskController::class, 'add']
-)->name('add');
+Route::middleware(['auth', 'verified'])->group(function () {
 
-Route::put(
-    '/task/update/{id}',
-    [TaskController::class, 'updateTask']
-)->name('update');
 
-Route::get(
-    '/task/delete/{id}',
-    [TaskController::class, 'deleteTask']
-)->name('delete');
+    Route::get('/', [TaskController::class, 'task'])->name('task');
 
-// Route::get(
-//     '/filterTask',
-//     [TaskController::class, 'task']
-// )->name('filterTask');
 
-Route::get('/', [TaskController::class, 'task'])
-    ->middleware(['auth', 'verified'])
-    ->name('task');
+    Route::prefix('task')->controller(TaskController::class)->group(function () {
+        Route::post('/add', 'add')->name('add');
+        Route::put('/update/{id}', 'updateTask')->name('update');
+        Route::delete('/delete/{id}', 'deleteTask')->name('delete');
+        Route::get('/summary-pdf', 'generateSummaryPdf')->name('summary');
+        Route::patch('/toggle-complete/{id}', 'toggleRadioButton')->name('toggle');
+    });
+});
+
 
 
 Route::middleware('auth')->group(function () {
