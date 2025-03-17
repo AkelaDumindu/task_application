@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use Termwind\Components\Dd;
 
 class ProfileController extends Controller
 {
@@ -16,6 +17,8 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
+
+        // dd("assa");
         return view('profile.edit', [
             'user' => $request->user(),
         ]);
@@ -25,17 +28,38 @@ class ProfileController extends Controller
      * Update the user's profile information.
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
-    {
-        $request->user()->fill($request->validated());
+{
+    $user = $request->user();
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+    $validatedData = $request->validated();
+
+    // Handle avatar upload
+    if ($request->hasFile('avatar')) {
+        $avatarFile = $request->file('avatar');
+        $avatarName = time() . '.' . $avatarFile->getClientOriginalExtension();
+        $avatarFile->move(public_path('avatars'), $avatarName);
+
+        
+        if ($user->avatar && $user->avatar !== 'avatars/default.png') {
+            $oldAvatarPath = public_path($user->avatar);
+            if (file_exists($oldAvatarPath)) {
+                unlink($oldAvatarPath);
+            }
         }
 
-        $request->user()->save();
-
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        $validatedData['avatar'] = 'avatars/' . $avatarName;
     }
+
+    // Check if email is updated and reset verification
+    if ($user->email !== $validatedData['email']) {
+        $user->email_verified_at = null;
+    }
+
+    $user->update($validatedData);
+
+    return Redirect::route('profile.edit')->with('status', 'profile-updated');
+}
+
 
     /**
      * Delete the user's account.
@@ -54,6 +78,8 @@ class ProfileController extends Controller
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+
+
 
         return Redirect::to('/');
     }

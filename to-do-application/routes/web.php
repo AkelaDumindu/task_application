@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\UserImageController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -20,6 +21,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::patch('/toggle-complete/{id}', 'toggleRadioButton')->name('toggle');
     });
 });
+
 
 
 

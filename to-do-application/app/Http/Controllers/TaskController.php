@@ -16,35 +16,46 @@ class TaskController extends Controller
 {
     public function task(Request $request)
     {
-
         try {
             $today = now()->toDateString();
 
-            $search = $request->query('search');
+            // $search = $request->query('search');
             $category = $request->query('category');
             $priority = $request->query('priority');
             $filterDate = $request->query('filterDate', '');
             $summary = $request->query('summary');
 
+
             $query = Task::where('user_id', Auth::id());
 
-            if ($filterDate === "today") {
-                $query->whereDate('duedate', $today);
-            } elseif ($filterDate === "all" || empty($filterDate)) {
-
+            if ($request->filled('search')) {
+                $query->where('title', 'like', '%' . $request->search . '%');
             }
 
+
             if ($summary === "completed") {
+
                 $query->where('is_completed', true);
+            } else {
+
+                $query->where('is_completed', false);
+
+
             }
 
             if ($summary === "pending") {
-                $query->where('is_completed', false)->whereDate('duedate', '>=', $today);
+                $query->whereDate('duedate', '>=', $today);
             }
 
             if ($summary === "overdue") {
-                $query->where('is_completed', false)->whereDate('duedate', '<', $today);
+                $query->whereDate('duedate', '<', $today)->where("is_completed", false);
             }
+
+
+            if ($filterDate === "today") {
+                $query->whereDate('duedate', $today);
+            }
+
 
 
             if (!empty($category)) {
@@ -55,28 +66,22 @@ class TaskController extends Controller
                 $query->where('priority', $priority);
             }
 
-            if (!empty($search)) {
-                $query->where('title', 'like', '%' . $search . '%');
+            $query->orderBy('duedate', 'asc');
+
+
+            $tasks = $query->paginate(6);
+
+            if ($request->ajax()) {
+                return view('components.task-list', compact('tasks'))->render();
             }
 
-            $tasks = $query->get();
 
-            $tasks = $query->paginate(6)->appends([
-                'search' => $search,
-                'category' => $category,
-                'priority' => $priority,
-                'filterDate' => $filterDate,
-                'summary' => $summary
-            ]);
-
-
-            return view('tasks.task', ['tasks' => $tasks])->with('message', "All Tasks are loaded");
+            return view('tasks.task', ['tasks' => $tasks])->with('message', "Tasks loaded successfully.");
         } catch (\Throwable $th) {
-            return redirect()->route('task')->with('message', 'Failed to add task!')->with('alert-type', 'error');
+            return redirect()->route('task')->with('message', 'Failed to load tasks!')->with('alert-type', 'error');
         }
-
-
     }
+
 
 
 
@@ -87,7 +92,7 @@ class TaskController extends Controller
             $task = $request->validated();
 
             $task['user_id'] = Auth::id();
-     
+
             $saveData = Task::create($task);
             return redirect(route('task'))->with('message', 'Task added successfully!')->with('alert-type', 'success');
         } catch (\Throwable $th) {
@@ -184,6 +189,8 @@ class TaskController extends Controller
 
 
     }
+
+
 }
 
 
