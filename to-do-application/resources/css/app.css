@@ -78,10 +78,6 @@
     width: 100%;
 }
 
-/* .category-filter-outer, .priority-filter-outer {
-    flex: 1; 
-    border: 1px solid white;
-} */
 
 .sorting-outer{
     display: flex;
@@ -121,6 +117,12 @@
 }
 
 
+@media (max-width: 1280px) and (min-width: 1020px) {
+    .main-card-outer {
+        max-width: 48rem;
+    }
+}
+
 
 @media (max-width: 960px){
 
@@ -153,15 +155,12 @@
     gap: 10px;
 }
 
-/* Responsive: Row layout on larger screens */
+
 @media (max-width: 480px) {
-    /* .button-section-outer {
-        flex-direction: column;
-    } */
+   
 
     .buttonn-outer{
         width: 100%;
-        /* flex-direction: column; */
         margin-bottom: 20px;
         margin-top: 10px;
         display: flex;
@@ -196,40 +195,7 @@
 
 
 @media (max-width: 380px) {
-    /* .button-section-outer {
-        flex-direction: column;
-    } */
-
-    /* .buttonn-outer{
-        width: 100%;
-        
-        margin-bottom: 20px;
-        margin-top: 10px;
-        display: flex;
-    } */
-
     
-    /* .edit-button{
-        
-        justify-content: center;
-        align-items: center;
-        
-    } */
-
-    /* .delete-button{
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        
-    } */
-
-    /* .add-button{
-        font-size: 10px;
-    } */
-/* 
-    .task-filter-today{
-        font-size: 12px;
-    } */
      
     .filter-button-outer{
         flex-direction: column;
@@ -243,92 +209,7 @@
     
 }
 
-/* Inner container for buttons */
-/* .button-container {
-    width: 100%;
-    display: flex;
-    gap: 10px;
-}
 
-
-.btn {
-    width: 100%;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    padding: 8px 12px;
-    font-size: 14px;
-    font-weight: 500;
-    text-align: center;
-    color: white;
-    border-radius: 8px;
-    cursor: pointer;
-    border: none;
-    transition: background 0.3s;
-}
-
-.btn-delete {
-    background-color: #dc2626;
-}
-
-.btn-delete:hover {
-    background-color: #b91c1c;
-}
-
-.btn-edit {
-    background-color: #ca8a04;
-}
-
-.btn-edit:hover {
-    background-color: #a16207;
-}
-
-
-.toggle-container {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-}
-
-.toggle-input {
-    display: none;
-}
-
-.toggle-switch {
-    position: relative;
-    width: 44px;
-    height: 24px;
-    background: #ccc;
-    border-radius: 12px;
-    transition: 0.3s;
-}
-
-.toggle-switch::before {
-    content: "";
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    top: 2px;
-    left: 2px;
-    background: white;
-    border-radius: 50%;
-    transition: 0.3s;
-}
-
-.toggle-input:checked + .toggle-switch {
-    background: #16a34a;
-}
-
-.toggle-input:checked + .toggle-switch::before {
-    transform: translateX(20px);
-}
-
-.toggle-label {
-    margin-left: 10px;
-    font-size: 14px;
-    font-weight: 500;
-    color: #333;
-} */
 
 
 .button-section-outer{
@@ -370,7 +251,7 @@
 
 
 
-/* task card */
+
 
 .card-title-section{
     display: flex;

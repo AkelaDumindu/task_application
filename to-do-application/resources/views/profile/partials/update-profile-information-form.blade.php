@@ -24,6 +24,18 @@
         </div>
 
         <div>
+            <x-input-label for="avatar" :value="__('Profile Image')" />
+            <x-text-input id="avatar" name="avatar" type="file" class="mt-1 block w-full" accept="image/*" />
+            <x-input-error class="mt-2" :messages="$errors->get('avatar')" />
+    
+            @if ($user->avatar)
+                <img src="{{ asset($user->avatar) }}" class="h-20 w-20 rounded-full mt-2 object-cover" alt="Avatar">
+            @else
+                <img src="{{ asset('avatars/default.png') }}" class="h-20 w-20 rounded-full mt-2 object-cover" alt="Default Avatar">
+            @endif
+        </div>
+
+        <div>
             <x-input-label for="email" :value="__('Email')" />
             <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="username" />
             <x-input-error class="mt-2" :messages="$errors->get('email')" />

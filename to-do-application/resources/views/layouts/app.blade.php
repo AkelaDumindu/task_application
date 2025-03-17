@@ -6,7 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Task Manager Application') }}</title>
+    <title>Task Management</title>
+
+
+    <link rel="icon" type="image/x-icon" href="favicons/task.png">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -16,9 +19,14 @@
 
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.3/flowbite.min.css" rel="stylesheet">
-    
+
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- SweetAlert2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
     <!-- Toastify CSS and JS -->
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
@@ -32,49 +40,7 @@
 <body class="font-sans antialiased">
     <div class="min-h-screen bg-gray-100 dark:bg-gray-900 flex">
 
-        <!-- Sidebar -->
-        {{-- <aside id="sidebar" class="w-64 bg-gray-800 text-white min-h-screen p-5 transition-transform duration-300">
-            <div class="flex justify-between items-center mb-5">
 
-                <div class="text-lg font-semibold">
-                    <a href="#" class="hover:text-gray-300 text-[32px]">Task Manager Application</a>
-                </div>
-            </div>
-            <ul class="space-y-5 side-nav-names">
-                <li>
-                    <a href="{{ route('dashboard')}}" class="flex items-center space-x-3 p-2 hover:bg-gray-700 rounded">
-                        <i class="lni lni-home"></i>
-                        <span>Home</span>
-                    </a>
-                </li>
-
-                <li>
-                    <a href="{{ route('add') }}" class="flex items-center space-x-3 p-2 hover:bg-gray-700 rounded">
-                        <i class="lni lni-home"></i>
-                        <span>Add New Task</span>
-                    </a>
-                </li>
-
-                <li>
-                    <a href="{{ route('') }}" class="flex items-center space-x-3 p-2 hover:bg-gray-700 rounded">
-                        <i class="lni lni-home"></i>
-                        <span>All Tasks</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="flex items-center space-x-3 p-2 hover:bg-gray-700 rounded">
-                        <i class="lni lni-plus"></i>
-                        <span>Important Task</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="flex items-center space-x-3 p-2 hover:bg-gray-700 rounded">
-                        <i class="lni lni-direction"></i>
-                        <span>Completed Task</span>
-                    </a>
-                </li>
-            </ul>
-        </aside> --}}
 
 
         <div class="flex-1">
@@ -107,6 +73,12 @@
             sidebar.classList.toggle('-translate-x-full');
         });
     </script>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"
+        integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"
@@ -154,10 +126,7 @@
 
 
 
-    {{--
-    <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
 
-    <script src="../path/to/flowbite/dist/flowbite.min.js"></script> --}}
 
 
 </body>

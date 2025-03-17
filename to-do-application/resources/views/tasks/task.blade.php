@@ -9,7 +9,7 @@
             </div>
 
             <div class="button-outer gap-2">
-                
+
 
                 <a class="add-button flex gap-1.5 justify-center items-center bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 py-2 rounded-3xl "
                     href="{{ route('summary') }}">
@@ -31,7 +31,7 @@
 
         </div>
 
-        
+
 
 
         <div class="filter-outer ">
@@ -107,14 +107,9 @@
 
                 <div class="search-filter-outer">
 
-                    <input type="text" name="search" id="search"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                    <input type="text" name="search" id="search" value="{{ request('search') }}"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white"
                         placeholder="Search by title" />
-
-
-                    <button type="submit"
-                        class="w-full flex-[0.3] text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                        Search</button>
 
                     <a type="submit" href="{{ route('task') }}"
                         class="w-full flex-[0.3] text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
@@ -152,19 +147,11 @@
         </div>
 
 
-        <div class="md:w-[80%] mt-8">
+        @include('components.task-list', ['tasks' => $tasks])
 
-            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                @foreach ($tasks as $task)
-                    @include('components.task-card', ['task' => $task])
-                @endforeach
+        
 
-                <div class="mt-4">
-                    {{ $tasks->links() }}
-                </div>
 
-            </div>
-        </div>
 
 
     </div>
@@ -206,9 +193,9 @@
                         <div>
                             <label for="description"
                                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
-                            <input type="text" name="description" id="description" placeholder=""
+                            <textarea name="description" id="description" rows="5"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                                required />
+                                required></textarea>
                         </div>
 
                         <div class="relative max-w-sm">
@@ -291,6 +278,74 @@
             });
         });
     </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const searchInput = document.getElementById('search');
+            const taskList = document.getElementById('task-list');
+
+            searchInput.addEventListener('keyup', function () {
+                let query = searchInput.value;
+
+                fetch(`{{ route('task') }}?search=${query}`, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                    .then(response => response.text())
+                    .then(data => {
+
+                        taskList.innerHTML = data;
+                    })
+                    .catch(error => console.error('Error:', error));
+            });
+        });
+    </script>
+
+
+    <script>
+        let page = 1;
+        let isLoading = false;
+        let lastPageReached = false;
+
+        window.addEventListener('scroll', () => {
+            if (lastPageReached || isLoading) return;
+
+            // Check if near bottom of page
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500) {
+                loadMoreTasks();
+            }
+        });
+
+        function loadMoreTasks() {
+            page++;
+            isLoading = true;
+            document.getElementById('loading').classList.remove('hidden');
+
+            const params = new URLSearchParams(window.location.search);
+            params.set('page', page);
+
+            fetch(`{{ route('task') }}?${params.toString()}`, {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+                .then(response => response.text())
+                .then(data => {
+                    if (data.trim() === '') {
+                        lastPageReached = true; // No more data to load
+                    } else {
+                        document.getElementById('task-list').insertAdjacentHTML('beforeend', data);
+                    }
+                })
+                .catch(error => console.error('Error loading tasks:', error))
+                .finally(() => {
+                    isLoading = false;
+                    document.getElementById('loading').classList.add('hidden');
+                });
+        }
+    </script>
+
 
 
 </x-app-layout>
