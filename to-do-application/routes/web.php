@@ -10,15 +10,15 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['auth', 'verified'])->group(function () {
 
 
-    Route::get('/', [TaskController::class, 'task'])->name('task');
+    Route::get('/', [TaskController::class, 'getAllTask'])->name('task');
 
 
     Route::prefix('task')->controller(TaskController::class)->group(function () {
-        Route::post('/add', 'add')->name('add');
+        Route::post('/add', 'addTask')->name('add');
         Route::put('/update/{id}', 'updateTask')->name('update');
         Route::delete('/delete/{id}', 'deleteTask')->name('delete');
         Route::get('/summary-pdf', 'generateSummaryPdf')->name('summary');
-        Route::patch('/toggle-complete/{id}', 'toggleRadioButton')->name('toggle');
+        Route::patch('/toggle-complete/{id}', 'handleTaskComplete')->name('toggle');
     });
 });
 
