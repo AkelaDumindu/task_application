@@ -1,11 +1,9 @@
 <x-app-layout>
 
-
-
     <div class=" flex justify-center items-center flex-col">
         <div class="filter-button-outer">
             <div class="flex justify-end">
-                <h1 class="text-white text-[32px] lg:text-[36px] mt-4 font-bold">My Tasks</h1>
+                <h1 class="text-white text-[32px] lg:text-[36px] font-bold">My Tasks</h1>
             </div>
 
             <div class="button-outer gap-2">
@@ -140,7 +138,7 @@
 
             <a href="{{ route('task', ['filterDate' => 'today']) }}"
                 class="task-filter-today flex-[0.5] py-1 flex rounded-r-[40px] border-none justify-center items-center 
-                {{ request('filterDate') === 'today' ? 'bg-[#9290C3] text-white' : 'border border-[#9290C3] text-[#9290C3] hover:bg-[#9290C3] hover:text-white' }}">
+                {{ request('filterDate') === 'today' ? 'bg-[#9290C3] text-white' : 'border border-[#9290C3] text-[#e2e2eb] hover:bg-[#9290C3] hover:text-white' }}">
                 Today Tasks
             </a>
             
@@ -151,7 +149,9 @@
         @include('components.task-list', ['tasks' => $tasks])
 
         
-
+        <div id="loading" class="text-center hidden">
+            <span class="text-gray-500 animate-pulse">Loading more tasks...</span>
+        </div>
 
 
 
@@ -264,88 +264,7 @@
         </div>
     </div>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const datepickerEl = document.getElementById('duedate');
-
-
-            const today = new Date().toISOString().split('T')[0];
-
-            new Datepicker(datepickerEl, {
-                format: 'yyyy-mm-dd',
-                minDate: today,
-                autohide: true,
-                todayHighlight: true
-            });
-        });
-    </script>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const searchInput = document.getElementById('search');
-            const taskList = document.getElementById('task-list');
-
-            searchInput.addEventListener('keyup', function () {
-                let query = searchInput.value;
-
-                fetch(`{{ route('task') }}?search=${query}`, {
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest'
-                    }
-                })
-                    .then(response => response.text())
-                    .then(data => {
-
-                        taskList.innerHTML = data;
-                    })
-                    .catch(error => console.error('Error:', error));
-            });
-        });
-    </script>
-
-
-    <script>
-        let page = 1;
-        let isLoading = false;
-        let lastPageReached = false;
-
-        window.addEventListener('scroll', () => {
-            if (lastPageReached || isLoading) return;
-
-            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500) {
-                loadMoreTasks();
-            }
-        });
-
-        function loadMoreTasks() {
-            page++;
-            isLoading = true;
-            document.getElementById('loading').classList.remove('hidden');
-
-            const params = new URLSearchParams(window.location.search);
-            params.set('page', page);
-
-            fetch(`{{ route('task') }}?${params.toString()}`, {
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
-                }
-            })
-                .then(response => response.text())
-                .then(data => {
-                    if (data.trim() === '') {
-                        lastPageReached = true;
-                    } else {
-                        document.getElementById('task-list').insertAdjacentHTML('beforeend', data);
-                    }
-                })
-                .catch(error => console.error('Error loading tasks:', error))
-                .finally(() => {
-                    isLoading = false;
-                    document.getElementById('loading').classList.add('hidden');
-                });
-        }
-    </script>
-
+    @include('libraries.task-script')
 
 
 </x-app-layout>

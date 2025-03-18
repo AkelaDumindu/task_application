@@ -6,6 +6,7 @@ use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use Termwind\Components\Dd;
@@ -30,13 +31,18 @@ class ProfileController extends Controller
     public function update(ProfileUpdateRequest $request): RedirectResponse
 {
     $user = $request->user();
-
     $validatedData = $request->validated();
 
-    // Handle avatar upload
-    if ($request->hasFile('avatar')) {
+   
+    if ($request->hasFile("avatar")) {
+        Log::info('Avatar file detected');
+
         $avatarFile = $request->file('avatar');
         $avatarName = time() . '.' . $avatarFile->getClientOriginalExtension();
+
+        Log::info('Avatar Name: ' . $avatarName);
+
+        
         $avatarFile->move(public_path('avatars'), $avatarName);
 
         
@@ -50,16 +56,18 @@ class ProfileController extends Controller
         $validatedData['avatar'] = 'avatars/' . $avatarName;
     }
 
-    // Check if email is updated and reset verification
+    
     if ($user->email !== $validatedData['email']) {
         $user->email_verified_at = null;
     }
 
+    Log::info('Validated Data:', $validatedData);
+
+  
     $user->update($validatedData);
 
-    return Redirect::route('profile.edit')->with('status', 'profile-updated');
+    return Redirect::route('task')->with('status', 'profile-updated');
 }
-
 
     /**
      * Delete the user's account.

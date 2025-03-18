@@ -25,9 +25,9 @@
             @else
                 
                 <h4 class="
-                    {{ $task->priority === 'low' ? 'text-white' : '' }}
-                    {{ $task->priority === 'high' ? 'text-red-700' : '' }}
-                    {{ $task->priority === 'medium' ? 'text-yellow-700' : '' }}
+                    {{ $task->priority === 'low' ? 'text-black text-xs bg-white rounded-[5px] py-0.2 px-1' : '' }}
+                    {{ $task->priority === 'high' ? 'text-black text-xs bg-red-500 rounded-[5px] py-0.2 px-1' : '' }}
+                    {{ $task->priority === 'medium' ? 'bg-yellow-500 text-xs rounded-[5px] py-0.2 px-1' : '' }}
                 ">
                     {{ ucfirst($task->priority) }}
                 </h4>
@@ -235,30 +235,6 @@
 </div>
 
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const deleteForms = document.querySelectorAll('.delete-form');
-
-        deleteForms.forEach(form => {
-            form.addEventListener('submit', function (e) {
-                e.preventDefault(); 
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, delete it!',
-                    cancelButtonText: 'Cancel'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        form.submit(); 
-                    }
-                });
-            });
-        });
-    });
-</script>
+@include('libraries.task-card-script')
 
 
