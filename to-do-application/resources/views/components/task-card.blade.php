@@ -26,7 +26,7 @@
                 
                 <h4 class="
                     {{ $task->priority === 'low' ? 'text-black text-xs bg-white rounded-[5px] py-0.2 px-1' : '' }}
-                    {{ $task->priority === 'high' ? 'text-black text-xs bg-red-500 rounded-[5px] py-0.2 px-1' : '' }}
+                    {{ $task->priority === 'high' ? 'text-white text-xs bg-red-700 rounded-[5px] py-0.2 px-1' : '' }}
                     {{ $task->priority === 'medium' ? 'bg-yellow-500 text-xs rounded-[5px] py-0.2 px-1' : '' }}
                 ">
                     {{ ucfirst($task->priority) }}
@@ -235,6 +235,6 @@
 </div>
 
 
-@include('libraries.task-card-script')
+{{-- @include('libraries.task-card-script') --}}
 
 

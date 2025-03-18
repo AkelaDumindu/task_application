@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
-    public function task(Request $request)
+    public function getAllTask(Request $request)
     {
         try {
             $today = now()->toDateString();
@@ -23,8 +23,6 @@ class TaskController extends Controller
             $priority = $request->query('priority');
             $filterDate = $request->query('filterDate', '');
             $summary = $request->query('summary');
-
-
             $query = Task::where('user_id', Auth::id());
 
             if ($request->filled('search')) {
@@ -36,10 +34,7 @@ class TaskController extends Controller
 
                 $query->where('is_completed', true);
             } else {
-
                 $query->where('is_completed', false);
-
-
             }
 
             if ($summary === "pending") {
@@ -50,12 +45,9 @@ class TaskController extends Controller
                 $query->whereDate('duedate', '<', $today)->where("is_completed", false);
             }
 
-
             if ($filterDate === "today") {
                 $query->whereDate('duedate', $today);
             }
-
-
 
             if (!empty($category)) {
                 $query->where('category', $category);
@@ -67,13 +59,11 @@ class TaskController extends Controller
 
             $query->orderBy('duedate', 'asc');
 
-
             $tasks = $query->paginate(6);
 
             if ($request->ajax()) {
                 return view('components.task-list', compact('tasks'))->render();
             }
-
 
             return view('tasks.task', ['tasks' => $tasks])->with('message', "Tasks loaded successfully.");
         } catch (\Throwable $th) {
@@ -81,12 +71,8 @@ class TaskController extends Controller
         }
     }
 
-
-
-
-    public function add(TaskRequest $request)
+    public function addTask(TaskRequest $request)
     {
-
         try {
             $task = $request->validated();
 
@@ -96,30 +82,21 @@ class TaskController extends Controller
             return redirect(route('task'))->with('message', 'Task added successfully!')->with('alert-type', 'success');
         } catch (\Throwable $th) {
             return $th;
-
         }
-
     }
-
 
     public function updateTask(UpdateTaskRequest $request, $id)
     {
-
         try {
             $task = Task::find($id);
             $createdTask = $request->validated();
-
             $createdTask['user_id'] = Auth::id();
-
             $task->update($createdTask);
 
             return redirect(route('task'))->with('message', 'Task updated successfully!')->with('alert-type', 'success');
         } catch (\Throwable $th) {
             return redirect(route('task'))->with('message', 'Task update Error!')->with('alert-type', 'error');
         }
-
-
-
     }
 
     public function deleteTask(Request $request, $id)
@@ -134,9 +111,6 @@ class TaskController extends Controller
         } catch (\Throwable $th) {
             return redirect(route('task'))->with('message', 'Task Created has Error!')->with('alert-type', 'error');
         }
-
-
-
     }
 
     public function generateSummaryPdf()
@@ -154,26 +128,18 @@ class TaskController extends Controller
                 'overDueTask' => $overDueTask
             ];
 
-
             session()->flash('message', 'PDF Downloaded!');
             session()->flash('alert-type', 'success');
-
 
             $pdf = PDF::loadView('tasks.task-summary-pdf', $data);
             return $pdf->download('TaskSummary.pdf');
 
         } catch (\Throwable $th) {
-
             return $th;
         }
     }
-
-
-
-    public function toggleRadioButton(Request $request, $id)
+    public function handleTaskComplete(Request $request, $id)
     {
-
-
         try {
             $task = Task::find($id);
 
@@ -184,12 +150,7 @@ class TaskController extends Controller
         } catch (\Throwable $th) {
             return redirect("/")->with('message', 'Task status is not changed!')->with('alert-type', 'error');
         }
-
-
-
     }
-
-
 }
 
 

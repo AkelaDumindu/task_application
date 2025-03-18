@@ -1,4 +1,5 @@
 import './bootstrap';
+import './custom';
 import 'flowbite';
 import 'toastr/build/toastr.min.css';
 import 'flowbite-datepicker';
