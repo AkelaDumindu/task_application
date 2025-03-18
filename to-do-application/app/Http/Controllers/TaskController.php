@@ -19,7 +19,6 @@ class TaskController extends Controller
         try {
             $today = now()->toDateString();
 
-            // $search = $request->query('search');
             $category = $request->query('category');
             $priority = $request->query('priority');
             $filterDate = $request->query('filterDate', '');

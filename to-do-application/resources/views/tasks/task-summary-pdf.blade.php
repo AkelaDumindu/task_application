@@ -2,7 +2,6 @@
 
     <h2>Task Summary Report</h2>
 
-    {{-- <h3>Pending Task</h3> --}}
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
         <h3>Pending Task</h3>
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">

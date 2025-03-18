@@ -1,33 +1,31 @@
 <x-app-layout>
 
-
-
     <div class=" flex justify-center items-center flex-col">
         <div class="filter-button-outer">
             <div class="flex justify-end">
-                <h1 class="text-white text-[32px] lg:text-[36px] mt-4 font-bold">My Tasks</h1>
+                <h1 class="text-white text-[32px] lg:text-[36px] font-bold">My Tasks</h1>
             </div>
 
             <div class="button-outer gap-2">
 
-
-                <a class="add-button flex gap-1.5 justify-center items-center bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 py-2 rounded-3xl "
+                <a class="add-button flex gap-1.5 justify-center items-center bg-[#9290C3] hover:bg-[#7F7DB0] text-white font-bold px-4 py-2 rounded-3xl"
                     href="{{ route('summary') }}">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="size-4 @min-[478px]:size-6">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
                     </svg> PDF
-
-
                 </a>
-
+            
                 <button data-modal-target="authentication-modal" data-modal-toggle="authentication-modal"
-                    class="add-button flex justify-center items-center bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 py-2 rounded-3xl "
+                    class="add-button flex justify-center items-center bg-[#535C91] hover:bg-[#464D7B] text-white font-bold px-4 py-2 rounded-3xl"
                     type="button">
-                    Add
-                    Task</button>
+                    Add Task
+                </button>
+            
             </div>
+            
+            
 
         </div>
 
@@ -111,15 +109,15 @@
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white"
                         placeholder="Search by title" />
 
-                    <a type="submit" href="{{ route('task') }}"
-                        class="w-full flex-[0.3] text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
+                        <a type="submit" href="{{ route('task') }}"
+                        class="w-full flex-[0.3] text-white bg-[#535C91] hover:bg-[#464D7B] focus:ring-4 focus:outline-none focus:ring-[#747BA8] font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-[#535C91] dark:hover:bg-[#464D7B] dark:focus:ring-[#3C4370]">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="size-6">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
                         </svg>
-
                     </a>
+                    
 
 
                 </div>
@@ -140,9 +138,10 @@
 
             <a href="{{ route('task', ['filterDate' => 'today']) }}"
                 class="task-filter-today flex-[0.5] py-1 flex rounded-r-[40px] border-none justify-center items-center 
-                {{ request('filterDate') === 'today' ? 'bg-red-600 text-white' : 'border border-red-600 text-red-600 hover:bg-red-600 hover:text-white' }}">
+                {{ request('filterDate') === 'today' ? 'bg-[#9290C3] text-white' : 'border border-[#9290C3] text-[#e2e2eb] hover:bg-[#9290C3] hover:text-white' }}">
                 Today Tasks
             </a>
+            
 
         </div>
 
@@ -150,7 +149,9 @@
         @include('components.task-list', ['tasks' => $tasks])
 
         
-
+        <div id="loading" class="text-center hidden">
+            <span class="text-gray-500 animate-pulse">Loading more tasks...</span>
+        </div>
 
 
 
@@ -263,89 +264,7 @@
         </div>
     </div>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const datepickerEl = document.getElementById('duedate');
-
-
-            const today = new Date().toISOString().split('T')[0];
-
-            new Datepicker(datepickerEl, {
-                format: 'yyyy-mm-dd',
-                minDate: today,
-                autohide: true,
-                todayHighlight: true
-            });
-        });
-    </script>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const searchInput = document.getElementById('search');
-            const taskList = document.getElementById('task-list');
-
-            searchInput.addEventListener('keyup', function () {
-                let query = searchInput.value;
-
-                fetch(`{{ route('task') }}?search=${query}`, {
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest'
-                    }
-                })
-                    .then(response => response.text())
-                    .then(data => {
-
-                        taskList.innerHTML = data;
-                    })
-                    .catch(error => console.error('Error:', error));
-            });
-        });
-    </script>
-
-
-    <script>
-        let page = 1;
-        let isLoading = false;
-        let lastPageReached = false;
-
-        window.addEventListener('scroll', () => {
-            if (lastPageReached || isLoading) return;
-
-            // Check if near bottom of page
-            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500) {
-                loadMoreTasks();
-            }
-        });
-
-        function loadMoreTasks() {
-            page++;
-            isLoading = true;
-            document.getElementById('loading').classList.remove('hidden');
-
-            const params = new URLSearchParams(window.location.search);
-            params.set('page', page);
-
-            fetch(`{{ route('task') }}?${params.toString()}`, {
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
-                }
-            })
-                .then(response => response.text())
-                .then(data => {
-                    if (data.trim() === '') {
-                        lastPageReached = true; // No more data to load
-                    } else {
-                        document.getElementById('task-list').insertAdjacentHTML('beforeend', data);
-                    }
-                })
-                .catch(error => console.error('Error loading tasks:', error))
-                .finally(() => {
-                    isLoading = false;
-                    document.getElementById('loading').classList.add('hidden');
-                });
-        }
-    </script>
-
+    @include('libraries.task-script')
 
 
 </x-app-layout>

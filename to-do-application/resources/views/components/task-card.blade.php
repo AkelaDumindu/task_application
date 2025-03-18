@@ -2,45 +2,43 @@
     use Illuminate\Support\Str;
 @endphp
 
-
 <div
-    class="max-w-sm main-card-outer p-6 border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 {{ $task->is_completed ? 'bg-green-800' : 'dark:bg-gray-800' }}">
-
-    <div class="card-title-section">
-
-    </div>
+    class="max-w-sm main-card-outer p-6 border rounded-lg shadow-sm 
+    {{ $task->is_completed ? 'border-green-600' : 'border-gray-200 dark:border-gray-700' }} dark:bg-gray-800">
 
     <div class="footer-section flex justify-between mb-2">
-
         <a href="#">
-            <h5 class=" text-2xl font-bold tracking-tight text-gray-900 dark:text-white capitalize">
+            <h5 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white capitalize">
                 {{ $task->title }}
             </h5>
             <div class="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
-                
-                <p class="text-[12px]">
-                    {{$task->duedate}}
-                </p>
+                <p class="text-[12px]">{{ $task->duedate }}</p>
             </div>
         </a>
+        
         <div>
-            <h4 class="
-                {{ $task->priority === 'low' ? 'text-white' : '' }}
-                {{ $task->priority === 'high' ? 'text-red-700' : '' }}
-                {{ $task->priority === 'medium' ? 'text-yellow-700' : '' }}
-            ">
-                {{ ucfirst($task->priority) }}
-            </h4>
+            @if ($task->is_completed)
+                
+                <svg class="w-6 h-6 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+            @else
+                
+                <h4 class="
+                    {{ $task->priority === 'low' ? 'text-black text-xs bg-white rounded-[5px] py-0.2 px-1' : '' }}
+                    {{ $task->priority === 'high' ? 'text-black text-xs bg-red-500 rounded-[5px] py-0.2 px-1' : '' }}
+                    {{ $task->priority === 'medium' ? 'bg-yellow-500 text-xs rounded-[5px] py-0.2 px-1' : '' }}
+                ">
+                    {{ ucfirst($task->priority) }}
+                </h4>
+            @endif
         </div>
     </div>
-
 
     <p data-modal-target="static-modal-{{ $task->id }}" data-modal-toggle="static-modal-{{ $task->id }}"
         class="max-h-16 mb-3 cursor-pointer font-normal text-gray-700 dark:text-gray-400">
         {{ Str::words($task->description, 10, '...') }}
     </p>
-
-
 
     <div class="button-section-outer">
         <div class="buttonn-outer">
@@ -48,7 +46,7 @@
                 @csrf
                 @method('DELETE')
                 <button type="submit"
-                    class="delete-button text-red-500 bg-none rounded-lg hover:text-red-800 focus:ring-4 focus:outline-none ">
+                    class="delete-button text-red-500 bg-none rounded-lg hover:text-red-800 focus:ring-4 focus:outline-none">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="size-6">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -57,7 +55,6 @@
                 </button>
             </form>
 
-
             <button data-modal-target="edit-modal-{{ $task->id }}" data-modal-toggle="edit-modal-{{ $task->id }}"
                 class="edit-button p-[10px] text-yellow-400 rounded-lg hover:text-yellow-800">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -65,17 +62,19 @@
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
                 </svg>
-
             </button>
         </div>
-
 
         <div class="radio-outer">
             <form class="complete-form" action="{{ route('toggle', ['id' => $task->id]) }}" method="POST">
                 @csrf
                 @method('PATCH')
                 <label class="radio-label flex items-center gap-2">
+                    @if ($task->is_completed)
+                    <span class="text-xs font-medium text-gray-900 dark:text-gray-300"></span>
+                    @else
                     <span class="text-xs font-medium text-gray-900 dark:text-gray-300">If done?</span>
+                    @endif
                     <input 
                         type="checkbox" 
                         name="is_completed"
@@ -93,15 +92,11 @@
                         dark:border-gray-600 peer-checked:bg-green-600 dark:peer-checked:bg-green-600">
                     </div>
                 </label>
-                
             </form>
         </div>
-        
     </div>
-
-
-
 </div>
+
 
 <!-- Edit Modal -->
 <div id="edit-modal-{{ $task->id }}" tabindex="-1" aria-hidden="true"
@@ -240,30 +235,6 @@
 </div>
 
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const deleteForms = document.querySelectorAll('.delete-form');
-
-        deleteForms.forEach(form => {
-            form.addEventListener('submit', function (e) {
-                e.preventDefault(); 
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, delete it!',
-                    cancelButtonText: 'Cancel'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        form.submit(); 
-                    }
-                });
-            });
-        });
-    });
-</script>
+@include('libraries.task-card-script')
 
 
