@@ -1,5 +1,7 @@
 <x-app-layout>
 
+    @section('title', 'Task Management')
+
     <div class=" flex justify-center items-center flex-col">
         <div class="filter-button-outer">
             <div class="flex justify-end">
@@ -16,16 +18,16 @@
                             d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
                     </svg> PDF
                 </a>
-            
+
                 <button data-modal-target="authentication-modal" data-modal-toggle="authentication-modal"
                     class="add-button flex justify-center items-center bg-[#535C91] hover:bg-[#464D7B] text-white font-bold px-4 py-2 rounded-3xl"
                     type="button">
                     Add Task
                 </button>
-            
+
             </div>
-            
-            
+
+
 
         </div>
 
@@ -37,7 +39,8 @@
                 <div class="filter-double-outer">
                     <div class="category-filter-outer">
 
-                        <select id="category" name="category" onchange="this.form.submit()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
+                        <select id="category" name="category" onchange="this.form.submit()"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
                             focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 
                             dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 
                             dark:focus:border-blue-500">
@@ -56,12 +59,14 @@
                     <div class="priority-filter-outer">
 
                         <div class="flex">
-                            <select id="priority" name="priority" onchange="this.form.submit()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
+                            <select id="priority" name="priority" onchange="this.form.submit()"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
                             focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 
                             dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 
                             dark:focus:border-blue-500">
                                 <option value="">Choose a priority</option>
-                                <option value="high" {{ request('priority') == 'high' ? 'selected' : '' }}>High</option>
+                                <option value="high" {{ request('priority') == 'high' ? 'selected' : '' }}>High
+                                </option>
                                 <option value="medium" {{ request('priority') == 'medium' ? 'selected' : '' }}>Medium
                                 </option>
                                 <option value="low" {{ request('priority') == 'low' ? 'selected' : '' }}>Low</option>
@@ -79,7 +84,8 @@
                     <div class="priority-filter-outer">
 
                         <div class="flex">
-                            <select id="summary" name="summary" onchange="this.form.submit()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
+                            <select id="summary" name="summary" onchange="this.form.submit()"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
                             focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 
                             dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 
                             dark:focus:border-blue-500">
@@ -109,7 +115,7 @@
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white"
                         placeholder="Search by title" />
 
-                        <a type="submit" href="{{ route('task') }}"
+                    <a type="submit" href="{{ route('task') }}"
                         class="w-full flex-[0.3] text-white bg-[#535C91] hover:bg-[#464D7B] focus:ring-4 focus:outline-none focus:ring-[#747BA8] font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-[#535C91] dark:hover:bg-[#464D7B] dark:focus:ring-[#3C4370]">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="size-6">
@@ -117,7 +123,7 @@
                                 d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
                         </svg>
                     </a>
-                    
+
 
 
                 </div>
@@ -141,14 +147,14 @@
                 {{ request('filterDate') === 'today' ? 'bg-[#9290C3] text-white' : 'border border-[#9290C3] text-[#e2e2eb] hover:bg-[#9290C3] hover:text-white' }}">
                 Today Tasks
             </a>
-            
+
 
         </div>
 
 
         @include('components.task-list', ['tasks' => $tasks])
 
-        
+
         <div id="loading" class="text-center hidden">
             <span class="text-gray-500 animate-pulse">Loading more tasks...</span>
         </div>
@@ -185,7 +191,8 @@
                     <form class="space-y-4" method="post" action="{{ route('add') }}">
                         @csrf
                         <div>
-                            <label for="title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Task
+                            <label for="title"
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Task
                                 Name</label>
                             <input type="name" name="title" id="title"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
@@ -208,11 +215,13 @@
                                 </svg>
                             </div>
                             <input id="duedate" name="duedate" datepicker datepicker-format="yyyy-mm-dd"
-                                datepicker-min-date="{{ date('Y-m-d') }}" datepicker-buttons datepicker-autoselect-today
-                                type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
+                                datepicker-min-date="{{ date('Y-m-d') }}" datepicker-buttons
+                                datepicker-autoselect-today type="text"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
                             focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 
                             dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 
-                            dark:focus:border-blue-500" placeholder="Select date">
+                            dark:focus:border-blue-500"
+                                placeholder="Select date">
                         </div>
 
 
@@ -258,7 +267,99 @@
         </div>
     </div>
 
-    
+    @section('task-js')
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                initDatepicker();
+                initSearchTasks();
+                initInfiniteScroll();
+            });
 
+
+            function initDatepicker() {
+                const datepickerEl = document.getElementById('duedate');
+                if (!datepickerEl) return;
+
+                const today = new Date().toISOString().split('T')[0];
+
+                new Datepicker(datepickerEl, {
+                    format: 'yyyy-mm-dd',
+                    minDate: today,
+                    autohide: true,
+                    todayHighlight: true
+                });
+            }
+
+
+            function initSearchTasks() {
+                const searchInput = document.getElementById('search');
+                const taskList = document.getElementById('task-list');
+
+                if (!searchInput || !taskList) return;
+
+                searchInput.addEventListener('keyup', function() {
+                    let query = searchInput.value.trim();
+
+                    fetch(`${taskRoute}?search=${encodeURIComponent(query)}`, {
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest'
+                            }
+                        })
+                        .then(response => response.text())
+                        .then(data => {
+                            taskList.innerHTML = data;
+                        })
+                        .catch(error => console.error('Error fetching tasks:', error));
+                });
+            }
+
+
+            function initInfiniteScroll() {
+                let page = 1;
+                let isLoading = false;
+                let lastPageReached = false;
+
+                window.addEventListener('scroll', () => {
+                    if (lastPageReached || isLoading) return;
+
+                    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500) {
+                        loadMoreTasks();
+                    }
+                });
+
+                function loadMoreTasks() {
+                    page++;
+                    isLoading = true;
+
+                    const loadingIndicator = document.getElementById('loading');
+                    if (loadingIndicator) loadingIndicator.classList.remove('hidden');
+
+                    const params = new URLSearchParams(window.location.search);
+                    params.set('page', page);
+
+                    fetch(`${taskRoute}?${params.toString()}`, {
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest'
+                            }
+                        })
+                        .then(response => response.text())
+                        .then(data => {
+                            if (data.trim() === '') {
+                                lastPageReached = true;
+                            } else {
+                                document.getElementById('task-list').insertAdjacentHTML('beforeend', data);
+                            }
+                        })
+                        .catch(error => console.error('Error loading tasks:', error))
+                        .finally(() => {
+                            isLoading = false;
+                            // alert("s")
+                            if (loadingIndicator) loadingIndicator.classList.add('hidden');
+                        });
+                }
+            }
+        </script>
+
+    @endsection
 
 </x-app-layout>
